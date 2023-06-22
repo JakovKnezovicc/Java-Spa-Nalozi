@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Container,
   Row,
@@ -9,12 +9,30 @@ import {
   Button,
 } from "reactstrap";
 import Navigation from "../components/Navigation";
-const AddUser = () => {
+import axios from "../components/AxiosConfig";
 
-    const inputGroupStyle = {
-        margin: "5px 0",
-        padding: "0"
+const AddUser = () => {
+  const[user, setUser] = useState({
+    ime: null,
+    prezime: null,
+    korisnickoIme: null,
+    lozinka: null
+  });
+  const inputGroupStyle = {
+      margin: "5px 0",
+      padding: "0"
+  }
+
+  const registerUser = async() => {
+    try {
+      const res = await axios.post("http://localhost:8080/api/auth/register", user);
+
+      console.log(res);
+
+    } catch (error) {
+      if(error) throw error;
     }
+  }
   return (
     <>
     <Navigation />
@@ -33,22 +51,21 @@ const AddUser = () => {
         <h1 style={{textAlign: "center"}}>KREIRAJ KORISNIKA</h1>
         <InputGroup style={inputGroupStyle}>
           <InputGroupText>Ime</InputGroupText>
-          <Input placeholder="Unesi" />
+          <Input placeholder="Unesi" value={user.ime} onChange={e => setUser({...user, ime: e.target.value})}/>
         </InputGroup>
         <InputGroup style={inputGroupStyle}>
           <InputGroupText>Prezime</InputGroupText>
-          <Input placeholder="Unesi" />
+          <Input placeholder="Unesi" value={user.prezime} onChange={e => setUser({...user, prezime: e.target.value})}/>
         </InputGroup>
         <InputGroup style={inputGroupStyle}>
           <InputGroupText>Korisnicko ime</InputGroupText>
-          <Input placeholder="Unesi" />
+          <Input placeholder="Unesi" value={user.korisnickoIme} onChange={e => setUser({...user, korisnickoIme: e.target.value})}/>
         </InputGroup>
         <InputGroup style={inputGroupStyle}>
           <InputGroupText>Lozinka</InputGroupText>
-          <Input placeholder="Unesi" type="password" /> 
-          
+          <Input placeholder="Unesi" type="password" value={user.lozinka} onChange={e => setUser({...user, lozinka: e.target.value})}/> 
         </InputGroup>
-        <Button color="primary" >Spremi</Button>
+        <Button color="primary" onClick={()=>registerUser()}>Spremi</Button>
       </Row>
     </Container>
     </>

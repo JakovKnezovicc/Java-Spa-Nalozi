@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -12,44 +13,50 @@ import {
   DropdownMenu,
   DropdownItem,
   NavbarText,
-} from 'reactstrap';
+} from "reactstrap";
 
 function Navigation(args) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggle = () => setIsOpen(!isOpen);
 
+  const navItemStyle = {
+    cursor: "pointer",
+  }
+
   return (
-    <div>
-      <Navbar {...args}>
-        <NavbarBrand href="/">reactstrap</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="me-auto" navbar>
-            <NavItem>
-              <NavLink href="/components/">Components</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">
-                GitHub
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-          <NavbarText>Simple Text</NavbarText>
-        </Collapse>
-      </Navbar>
-    </div>
+    <Navbar style={{ backgroundColor: "white", margin: "0px 0px 10px 0px", padding: 0, width: "100%" }}>
+      <NavbarBrand href="/">
+        <img
+          src="https://www.mev.hr/wp-content/uploads/2022/02/logowhite.svg"
+          alt="MEV_LOGO"
+          style={{ width: "50px", height: "50px" }}
+        />
+        <div style={{display: "inline", marginLeft: "10px"}}>Složeni aplikacijski programi - Projekt: Radni nalozi</div>
+      </NavbarBrand>
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="me-auto" navbar>
+          <NavItem style={navItemStyle} onClick={()=>navigate("/radno-polje")}>
+            <NavLink>
+              Radno polje - Mape i radni nalozi
+            </NavLink>
+          </NavItem>
+          <NavItem style={navItemStyle} onClick={()=>navigate("/korisnici/svi")}>
+            <NavLink>Svi korisnici</NavLink>
+          </NavItem>
+          <NavItem style={navItemStyle}  onClick={()=>navigate("/korisnici/novi")}>
+            <NavLink>Registriraj korisnika</NavLink>
+          </NavItem>
+          <NavItem style={navItemStyle}  onClick={()=>navigate("/korisnici/izbrisi")}>
+            <NavLink>Izbriši korisnika</NavLink>
+          </NavItem>
+          <NavItem style={navItemStyle}>
+            <NavLink>Logout</NavLink>
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </Navbar>
   );
 }
 

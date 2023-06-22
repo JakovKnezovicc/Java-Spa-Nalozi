@@ -4,7 +4,7 @@ import { AiFillFolder, AiFillPlusCircle } from "react-icons/ai";
 import { Container } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "../components/AxiosConfig";
-const Workspace = ({ setMapaId}) => {
+const Workspace = () => {
   const navigate = useNavigate();
   const [maps, setMaps] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,6 +40,7 @@ const Workspace = ({ setMapaId}) => {
         flexDirection: "column",
         height: "100%",
         backgroundColor: "whitesmoke",
+        padding: 0
       }}
     >
       <Navigation />
@@ -73,7 +74,6 @@ const Workspace = ({ setMapaId}) => {
                 margin: "0 5px",
               }}
               onClick={() => {
-                setMapaId(item.id);
                 navigate(`/radno-polje/uredi/${item.id}`);
               }}
             >

@@ -29,4 +29,9 @@ public class KorisnikController {
     public void registrirajKorisnika(@RequestBody Korisnik korisnik) {
         korisnikService.dodajKorisnika(korisnik);
     }
+
+    @PostMapping(value = "/izbrisi/{id}")
+    public void izbrisiKorisnika(@RequestBody Long id) {
+        korisnikService.izbrisiKorisnika(id);
+    }
 }

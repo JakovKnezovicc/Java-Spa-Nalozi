@@ -1,6 +1,7 @@
 package com.sap_nalozi.app.korisnik;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,6 @@ public class KorisnikService {
         if(korisnickoIme.isPresent()) {
             throw new IllegalStateException("Korisnicko ime zauzeto");
         }
-        System.out.println("hohohohohoho");
         korisnikRepository.save(korisnik);
     }
 
@@ -34,5 +34,9 @@ public class KorisnikService {
         }
 
         return korisnik.get().getId();
+    }
+
+    public void izbrisiKorisnika(Long id) {
+        korisnikRepository.deleteById(id);
     }
 }

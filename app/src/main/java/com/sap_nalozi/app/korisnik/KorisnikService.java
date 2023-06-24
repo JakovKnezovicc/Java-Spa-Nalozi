@@ -1,4 +1,6 @@
 package com.sap_nalozi.app.korisnik;
+import com.sap_nalozi.app.mape.MapaRepository;
+import com.sap_nalozi.app.nalozi.NalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,10 +11,14 @@ import java.util.Optional;
 @Service
 public class KorisnikService {
     private final KorisnikRepository korisnikRepository;
+    private final MapaRepository mapaRepository;
+    private final NalogRepository nalogRepository;
 
     @Autowired
-    public KorisnikService(KorisnikRepository korisnikRepository) {
+    public KorisnikService(KorisnikRepository korisnikRepository, MapaRepository mapaRepository, NalogRepository nalogRepository) {
         this.korisnikRepository = korisnikRepository;
+        this.mapaRepository = mapaRepository;
+        this.nalogRepository = nalogRepository;
     }
     public List<Korisnik> korisnici() {
         return korisnikRepository.findAll();
@@ -37,6 +43,8 @@ public class KorisnikService {
     }
 
     public void izbrisiKorisnika(Long id) {
+        nalogRepository.izbrisiNalogPoKorisnikId(id);
+        mapaRepository.izbrisiMapePoKorisnikId(id);
         korisnikRepository.deleteById(id);
     }
 }

@@ -24,7 +24,7 @@ const DeleteUser = () => {
   const handleDeleteUser = async (id) => {
     try {
         const res = await axios.post(`http://localhost:8080/api/korisnici/izbrisi/${id}`);
-        console.log("Izbrisan korisnik, ",id);
+        console.log("Izbrisan korisnik, ", id);
 
     } catch (error) {
         if(error) throw error;

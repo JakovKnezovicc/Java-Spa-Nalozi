@@ -31,7 +31,8 @@ public class KorisnikController {
     }
 
     @PostMapping(value = "/izbrisi/{id}")
-    public void izbrisiKorisnika(@RequestBody Long id) {
+    public void izbrisiKorisnika(@PathVariable Long id) {
+        System.out.println("Korisnik id: " +  id);
         korisnikService.izbrisiKorisnika(id);
     }
 }

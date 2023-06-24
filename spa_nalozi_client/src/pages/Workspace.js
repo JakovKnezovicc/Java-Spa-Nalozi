@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
-import { AiFillFolder, AiFillPlusCircle } from "react-icons/ai";
+import { AiFillFolder, AiFillPlusCircle, AiFillDelete } from "react-icons/ai";
 import { Container } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "../components/AxiosConfig";
@@ -32,6 +32,15 @@ const Workspace = () => {
       setIsLoading(true);
     }
   }, [maps]);
+
+  const handleDelete = async(id) => {
+    try{
+      const res = await axios.post(`http://localhost:8080/api/mape/izbrisi/${id}`);
+      console.log("handleDelete res", res);
+    } catch(error) {
+      if(error) throw error
+    }
+  }
   return (
     <Container
       fluid
@@ -77,12 +86,12 @@ const Workspace = () => {
                 navigate(`/radno-polje/uredi/${item.id}`);
               }}
             >
-              <AiFillFolder style={{ fontSize: "3rem" }} />
+              <AiFillFolder style={{ fontSize: "3rem", color: "darkorange" }} />
               <div>{item.naziv}</div>
               <div>{item.datumKreiranja.slice(0, 10)}</div>
-              <div>Broj dokumenata i naloga: 51</div>
-              <div>Kreator: Marko Ivanovic</div>
+              <div>Kreator: {item.korisnik.ime} {item.korisnik.prezime}</div>
               <div>Poduzeće: {item.poduzece}</div>
+              <AiFillDelete onClick={()=>handleDelete(item.id)}/>
             </div>
           ))}
       </div>

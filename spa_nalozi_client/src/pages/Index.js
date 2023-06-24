@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Input, Row, Form, FormGroup, Label, Button } from "reactstrap";
-const Index = ({handleToken}) => {
+import { useNavigate } from "react-router-dom";
+const Index = ({handleToken, isLoggedIn}) => {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     korisnickoIme: null,
     lozinka: null
@@ -13,11 +16,15 @@ const Index = ({handleToken}) => {
       const res = await axios.post("http://localhost:8080/api/auth/authenticate", user);
       console.log("this is res", res);
       handleToken(res.data.token, user.korisnickoIme);
-
     } catch (error) {
       if (error) throw error;
     }
   };
+
+
+  useEffect(()=>{
+    if(localStorage.getItem("token")) navigate("/radno-polje");
+  }, [isLoggedIn]);
 
   return (
     <Container fluid style={{display: "flex", height: "100%", justifyContent: "center", alignItems: "center", backgroundColor: "whitesmoke"}}>

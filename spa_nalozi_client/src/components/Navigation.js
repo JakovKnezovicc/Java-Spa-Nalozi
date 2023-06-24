@@ -24,6 +24,16 @@ function Navigation(args) {
     cursor: "pointer",
   }
 
+  const handleLogout = async() => {
+    try {
+      localStorage.clear();  
+      navigate("/");
+    } catch (error) {
+      if (error) throw error;
+    } 
+    
+  }
+
   return (
     <Navbar style={{ backgroundColor: "white", margin: "0px 0px 10px 0px", padding: 0, width: "100%" }}>
       <NavbarBrand href="/">
@@ -51,7 +61,7 @@ function Navigation(args) {
           <NavItem style={navItemStyle}  onClick={()=>navigate("/korisnici/izbrisi")}>
             <NavLink>Izbriši korisnika</NavLink>
           </NavItem>
-          <NavItem style={navItemStyle}>
+          <NavItem style={navItemStyle} onClick={()=>handleLogout()}>
             <NavLink>Logout</NavLink>
           </NavItem>
         </Nav>

@@ -9,7 +9,7 @@ Tehnologije:
 
 ## Pokretanje Aplikacije
 # Backend
-Pokrenuti server na portu 8080 i Mys. Kreirati MySQL bazu zvanu "mev_spa". 
+Pokrenuti apache server na portu 8080 i MySQL. Kreirati MySQL bazu zvanu "mev_spa". 
 Nakon toga možete pokrenuti aplikaciju.
 # Frontend
 Za pokretanje frontenda potrebno je prvo instalirati NodeJS i biblioteke.

@@ -42,6 +42,11 @@ public class AuthenticationService{
         );
         var user = korisnikRepository.pronadjiKorisnikaPoImenu(request.getKorisnickoIme()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+
+        boolean isAdmin = false;
+        if(user.getRole().toString() == "ADMIN") {
+            isAdmin = true;
+        }
+        return AuthenticationResponse.builder().token(jwtToken).isAdmin(isAdmin).build();
     }
 }

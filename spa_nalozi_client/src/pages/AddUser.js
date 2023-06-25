@@ -10,6 +10,8 @@ import {
 } from "reactstrap";
 import Navigation from "../components/Navigation";
 import axios from "../components/AxiosConfig";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddUser = () => {
   const[user, setUser] = useState({
@@ -26,11 +28,14 @@ const AddUser = () => {
   const registerUser = async() => {
     try {
       const res = await axios.post("http://localhost:8080/api/auth/register", user);
-
-      console.log(res);
+      setUser({  ime: null,
+        prezime: null,
+        korisnickoIme: null,
+        lozinka: null});
+      toast.success("Novi korisnik uspjesno kreiran...");
 
     } catch (error) {
-      if(error) throw error;
+      if(error) toast.error("Nesto je poslo po krivu...");
     }
   }
   return (
@@ -67,6 +72,7 @@ const AddUser = () => {
         </InputGroup>
         <Button color="primary" onClick={()=>registerUser()}>Spremi</Button>
       </Row>
+      <ToastContainer />
     </Container>
     </>
   );

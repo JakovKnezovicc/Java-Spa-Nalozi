@@ -2,28 +2,42 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Input, Row, Form, FormGroup, Label, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-const Index = ({handleToken, isLoggedIn}) => {
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from "../context/AuthContext";
+const Index = () => {
   const navigate = useNavigate();
+  const {isLoggedIn, setIsLoggedIn} = useAuth();
 
   const [user, setUser] = useState({
     korisnickoIme: null,
     lozinka: null
   });
 
-  const sendLoginCredentials = async () => {
-  
+  const handleLogin = async() => {
     try {
       const res = await axios.post("http://localhost:8080/api/auth/authenticate", user);
-      console.log("this is res", res);
-      handleToken(res.data.token, user.korisnickoIme);
-    } catch (error) {
-      if (error) throw error;
-    }
-  };
+      console.log("res resr", res);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("username", user.korisnickoIme);
 
+      console.log("RES DATA ADMIN: ", res.data.admin);
+      if(res.data.admin) {
+        localStorage.setItem("isAdmin", true);
+      }
+
+      setIsLoggedIn(true);
+    } catch (error) {
+      if (error) {
+        return toast.error("Krivo korisnicko ime ili lozinka...")
+      }
+    }
+  }
 
   useEffect(()=>{
-    if(localStorage.getItem("token")) navigate("/radno-polje");
+    if(isLoggedIn) {
+      navigate("/radno-polje");
+    } 
   }, [isLoggedIn]);
 
   return (
@@ -33,9 +47,11 @@ const Index = ({handleToken, isLoggedIn}) => {
           backgroundColor: "white",
           width: "500px",
           height: "350px",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
         }}
       >
         <Form style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+          <h4 style={{margin: "20px 0"}}>Ulogirajte se kako bi nastavili...</h4>
         <FormGroup>
             <Label>
             Korisničko ime
@@ -58,9 +74,10 @@ const Index = ({handleToken, isLoggedIn}) => {
             onChange={e => setUser({...user, lozinka: e.target.value})}
             />
         </FormGroup>
-        <Button color="success" onClick={()=>sendLoginCredentials()}>Login</Button>
+        <Button color="success" onClick={()=>handleLogin()}>Login</Button>
         </Form>
       </Row>
+      <ToastContainer />
     </Container>
   );
 };

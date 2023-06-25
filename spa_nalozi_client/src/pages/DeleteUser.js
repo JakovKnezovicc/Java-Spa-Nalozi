@@ -8,6 +8,16 @@ const DeleteUser = () => {
   const [korisnici, setKorisnici] = useState([]);
   const [isLoading, setIsLoading]= useState(true);
 
+  const handleDeleteUser = async (id) => {
+    try {
+        const res = await axios.post(`http://localhost:8080/api/korisnici/izbrisi/${id}`);
+        console.log("Izbrisan korisnik, ", id);
+
+    } catch (error) {
+        if(error) throw error;
+    }
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -20,16 +30,7 @@ const DeleteUser = () => {
     };
 
     fetchUsers();
-  }, []);
-  const handleDeleteUser = async (id) => {
-    try {
-        const res = await axios.post(`http://localhost:8080/api/korisnici/izbrisi/${id}`);
-        console.log("Izbrisan korisnik, ", id);
-
-    } catch (error) {
-        if(error) throw error;
-    }
-  };
+  }, [handleDeleteUser]);
 
   useEffect(()=>{
     korisnici.length >= 1 ? setIsLoading(false) : setIsLoading(true);

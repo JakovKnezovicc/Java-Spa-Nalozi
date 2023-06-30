@@ -16,13 +16,14 @@ import {
 import {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../components/AxiosConfig";
-import {BiCheck} from "react-icons/bi";
-
+import {BiCheck, BiEditAlt} from "react-icons/bi";
+import Navigation from "../components/Navigation";
 const Edit = () => {
   const navigate = useNavigate();
   const {id} = useParams();
   const [nalozi, setNalozi] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
   const [nalog, setNalog] = useState({
     ime: null,
     korisnik: {
@@ -35,19 +36,21 @@ const Edit = () => {
   const [nalogID, setNalogID] = useState(false);
   const [modal, setModal] = useState(false);
 
+  const handleNalozi = async()=>{
+    try {
+      console.log("PARAM ID: ", id);
+      const {data} = await axios.get("http://localhost:8080/api/nalozi/mapa", {params: {mapaId: id}});
+      console.log("nalozi: ", data);
+      setNalozi(data);
+      setRefresh(false);
+    } catch (error) {
+      if(error) throw error;
+    }
+  }
+
   const toggle = () => setModal(!modal);
   useEffect(()=>{
-    const handleNalozi = async()=>{
-      try {
-        console.log("PARAM ID: ", id);
-        const {data} = await axios.get("http://localhost:8080/api/nalozi/mapa", {params: {mapaId: id}});
-        console.log("nalozi: ", data);
-        setNalozi(data);
-      } catch (error) {
-        if(error) throw error;
-      }
-    }
-
+    
     const getKorisnikId = async() => {
       try {
         let ime = localStorage.getItem("username");
@@ -76,10 +79,19 @@ const Edit = () => {
     }
   }, [nalozi]);
 
+  useEffect(()=>{
+    if(refresh) handleNalozi();
+
+    return ()=>{
+      setRefresh(false);
+    }
+  }, [refresh]);
+
   const sendNalog = async() => {
     try {
       const data = await axios.post("http://localhost:8080/api/nalozi/novi", nalog);
       console.log("res data", data);
+      setRefresh(true);
     } catch (error) {
       if(error) throw error;
     }
@@ -89,7 +101,7 @@ const Edit = () => {
     console.log("NALOG ID", nalogID);
     try {
       const data = await axios.put(`http://localhost:8080/api/nalozi/status/${nalogID}`);
-
+      setRefresh(true);
     } catch (error) {
       if(error) throw error;
     }
@@ -109,6 +121,8 @@ const Edit = () => {
   }
 
   return (
+    <>
+    <Navigation />
     <Container
       fluid
       style={{
@@ -130,7 +144,7 @@ const Edit = () => {
                 <th>Datum kreiranja</th>
                 <th>Datum završetka</th>
                 <th>Status</th>
-                <th>Završi</th>
+                <th>Uredi</th>
               </tr>
             </thead>
             <tbody>
@@ -142,7 +156,7 @@ const Edit = () => {
                 <td>{n.datumPocetka.slice(0,10)}</td>
                 <td>{n.datumZavrsetka ? n.datumZavrsetka.slice(0,10): "U tijeku"}</td>
                 <td>{n.status ? "Završen" : "U tijeku"}</td>
-                <td style={{cursor: "pointer", backgroundColor: "whitesmoke"}} onClick={()=> handleClick(n.id)}><BiCheck style={{color: "green", fontSize: "1.5rem"}}/></td>
+                <td style={{cursor: "pointer", backgroundColor: "whitesmoke"}} onClick={()=> handleClick(n.id)}><BiEditAlt style={{color: "black", fontSize: "2rem"}}/></td>
               </tr>
               )})}
             </tbody>
@@ -153,10 +167,6 @@ const Edit = () => {
             <FormGroup>
               <Label>Naziv naloga</Label>
               <Input placeholder="Unesi..." type="text" value={nalog.ime} onChange={(e)=>setNalog((prevState)=>({...prevState, ime: e.target.value}))}/>
-            </FormGroup>
-            <FormGroup>
-              <Label>Osoba</Label>
-              <Input placeholder="Unesi..." type="text" />
             </FormGroup>
             <Button color="primary" style={{ width: "100%" }} onClick={()=>sendNalog()}>
               Spremi
@@ -182,6 +192,7 @@ const Edit = () => {
         </ModalFooter>
       </Modal>
     </Container>
+    </>
   );
 };
 

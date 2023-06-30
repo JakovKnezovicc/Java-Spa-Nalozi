@@ -8,7 +8,7 @@ import AddUser from "./pages/AddUser";
 import DeleteUser from "./pages/DeleteUser";
 import { useAuth } from "./context/AuthContext";
 function App() {
-  const {isLoggedIn } = useAuth();
+  const {isLoggedIn} = useAuth();
 
   if(!isLoggedIn) {
     return(
@@ -20,6 +20,7 @@ function App() {
     )
   }
 
+  else if(isLoggedIn && localStorage.getItem("isAdmin")) {
   return (
     <Router>
       <Routes>
@@ -35,6 +36,21 @@ function App() {
       </Routes>
     </Router>
   );
+  }
+
+  return (
+    <Router>
+    <Routes>
+      <Route element={<Index />} path="/" />
+      <Route
+        element={<Workspace />}
+        path="/radno-polje"
+      />
+      <Route element={<NewMap />} path="/radno-polje/nova-mapa" />
+      <Route element={<Edit />} path="/radno-polje/uredi/:id" />
+    </Routes>
+  </Router>
+  )
 }
 
 export default App;

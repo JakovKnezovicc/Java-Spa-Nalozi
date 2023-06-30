@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react'
 const Auth = createContext();
 
 export const AuthContext = ({children}) => {
+
   const[isLoggedIn, setIsLoggedIn] = useState(false);
   const handleLogout = async() => {
     localStorage.clear();
@@ -10,11 +11,11 @@ export const AuthContext = ({children}) => {
 
   useEffect(()=>{
     if(localStorage.getItem("token") === null) {
-      setIsLoggedIn(false);
-      } else{
-      setIsLoggedIn(true);
+      localStorage.clear();
+      return setIsLoggedIn(false);
+      } setIsLoggedIn(true)
+    
       console.log("Logged in pozvan bok");
-    }
 
     return ()=>{
       setIsLoggedIn(false);

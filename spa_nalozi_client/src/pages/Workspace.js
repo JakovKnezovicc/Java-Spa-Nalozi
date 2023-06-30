@@ -4,6 +4,7 @@ import { AiFillFolder, AiFillPlusCircle, AiFillDelete } from "react-icons/ai";
 import { Container } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "../components/AxiosConfig";
+import { useAuth } from "../context/AuthContext";
 const Workspace = () => {
   const navigate = useNavigate();
   const [maps, setMaps] = useState([]);
@@ -91,7 +92,9 @@ const Workspace = () => {
               <div>{item.datumKreiranja.slice(0, 10)}</div>
               <div>Kreator: {item.korisnik.ime} {item.korisnik.prezime}</div>
               <div>Poduzeće: {item.poduzece}</div>
-              <AiFillDelete onClick={()=>handleDelete(item.id)}/>
+
+              {localStorage.getItem("isAdmin") && <AiFillDelete onClick={()=>handleDelete(item.id)} style={{color: "black", fontSize: "3rem", zIndex: 12, }}/>}
+             
             </div>
           ))}
       </div>

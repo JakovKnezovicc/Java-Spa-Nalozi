@@ -6,22 +6,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from "../context/AuthContext";
 const Index = () => {
-  const navigate = useNavigate();
-  const {isLoggedIn, setIsLoggedIn} = useAuth();
-
   const [user, setUser] = useState({
     korisnickoIme: null,
     lozinka: null
   });
+  const navigate = useNavigate();
+  const {isLoggedIn, setIsLoggedIn} = useAuth();
 
   const handleLogin = async() => {
+    console.log("HANDLE LOGIN INGIG")
+    localStorage.clear();
     try {
       const res = await axios.post("http://localhost:8080/api/auth/authenticate", user);
       console.log("res resr", res);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("username", user.korisnickoIme);
 
-      console.log("RES DATA ADMIN: ", res.data.admin);
       if(res.data.admin) {
         localStorage.setItem("isAdmin", true);
       }
@@ -29,7 +29,7 @@ const Index = () => {
       setIsLoggedIn(true);
     } catch (error) {
       if (error) {
-        return toast.error("Krivo korisnicko ime ili lozinka...")
+        return toast.error("Krivo ime ili lozinka...")
       }
     }
   }

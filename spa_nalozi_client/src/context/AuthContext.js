@@ -14,12 +14,7 @@ export const AuthContext = ({children}) => {
       localStorage.clear();
       return setIsLoggedIn(false);
       } setIsLoggedIn(true)
-    
-      console.log("Logged in pozvan bok");
 
-    return ()=>{
-      setIsLoggedIn(false);
-    }
   }, [handleLogout]);
 
   return (
